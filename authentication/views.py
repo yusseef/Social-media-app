@@ -8,7 +8,9 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='Sign-In')
 def index(request):
-    return render(request, 'index.html')
+    user = Profile.objects.get(user = request.user)
+    context = {'user': user}
+    return render(request, 'index.html', context)
 
 def SignUp(request):
     if request.method == 'POST':
@@ -49,7 +51,7 @@ def SignIn(request):
         password = request.POST['password']
 
         user_login = auth.authenticate(username=username, password=password)
-        if user is not None:
+        if user_login is not None:
             auth.login(request, user_login)
             return redirect('index')
         else:

@@ -26,6 +26,7 @@ INSTALLED_APPS = [
 
     #Project apps
     'authentication',
+    'feed',
 ]
 
 MIDDLEWARE = [
