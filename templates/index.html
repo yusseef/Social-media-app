@@ -62,7 +62,7 @@
 
                                     <p class="my-3 leading-6"> Upload pics 
                                     </p>
-                                <form method="POST" action="">
+                                <form method="POST" action="{%url 'upload_post'%}" enctype="multipart/form-data">
                                         {% csrf_token %}
                                     <div>
                                         <input type="file" name="image_upload">
