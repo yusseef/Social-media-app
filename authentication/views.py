@@ -4,12 +4,15 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from.models import Profile
 from django.contrib.auth.decorators import login_required
+
+from feed.models import Post
 # Create your views here.
 
 @login_required(login_url='Sign-In')
 def index(request):
     user = Profile.objects.get(user = request.user)
-    context = {'user': user}
+    posts  = Post.objects.all()
+    context = {'user': user, 'posts': posts}
     return render(request, 'index.html', context)
 
 def SignUp(request):
