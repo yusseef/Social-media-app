@@ -62,7 +62,7 @@ def SignIn(request):
             return redirect('Sign-In')
     return render(request, 'signin.html')  
 @login_required(login_url='Sign-In')
-def profile(request):
+def profile_settings(request):
     user_profile = Profile.objects.get(user = request.user)
     #print(user_profile)
     if request.method == 'POST':
@@ -93,3 +93,14 @@ def profile(request):
 def Logout(request):
     auth.logout(request)
     return redirect('Sign-In')
+
+def profile(request, id):
+    user = User.objects.get(username = id)
+    profile = Profile.objects.get(user = user)
+    user_posts = Post.objects.filter(user = id)
+    posts_length = len(user_posts)
+    context = {'user':user, 
+    'profile': profile,
+    'user_posts':user_posts,
+    'posts_length': posts_length}
+    return render(request, 'profile.html', context)
