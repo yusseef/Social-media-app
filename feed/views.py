@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Post, LikePost
+from .models import Post, LikePost, Followers
 
 
 @login_required(login_url='Sign-In')
@@ -45,3 +45,11 @@ def like_post(request, id):
     #print(username)
     #print(id)
     return HttpResponse('Like post')
+
+@login_required(login_url='Sign-In')
+def follow_user(request):
+    if request.method == 'POST':
+        print(request.POST['follower'])
+        print(request.POST['user'])
+
+

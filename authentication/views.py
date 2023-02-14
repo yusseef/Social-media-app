@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from.models import Profile
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.hashers import make_password
 from feed.models import Post
 # Create your views here.
 
@@ -33,12 +33,17 @@ def SignUp(request):
                 messages.info(request, "Email is already taken")
                 return redirect('Sign-Up')
             else:
-                user = User.objects.create(username=username, email=email, password=password)
+                user = User.objects.create(username=username, email=email)
+                user.set_password(password)
                 user.save()
+
+                user_login = auth.authenticate(username = username, password = password)
+                auth.login(request, user_login)
+
                 user_model = User.objects.get(username=username)
                 new_profile = Profile.objects.create(user = user_model, id_user = user.id)
                 new_profile.save()
-                return redirect('Sign-Up')
+                return redirect('profile-settings')
         else:
             messages.info(request, 'Password dosent match')
             return redirect('Sign-Up')
@@ -54,6 +59,7 @@ def SignIn(request):
         password = request.POST['password']
 
         user_login = auth.authenticate(username=username, password=password)
+        print(user_login)
         if user_login is not None:
             auth.login(request, user_login)
             return redirect('index')
@@ -85,7 +91,7 @@ def profile_settings(request):
             user_profile.bio = bio
             user_profile.location = location
             user_profile.save()
-        return redirect('profile')
+        return redirect('profile-settings')
 
     return render(request, 'setting.html', {'user_profile': user_profile})
 
@@ -95,12 +101,12 @@ def Logout(request):
     return redirect('Sign-In')
 
 def profile(request, id):
-    user = User.objects.get(username = id)
-    profile = Profile.objects.get(user = user)
+    user_object = User.objects.get(username = id)
+    user_profile = Profile.objects.get(user = user_object)
     user_posts = Post.objects.filter(user = id)
     posts_length = len(user_posts)
-    context = {'user':user, 
-    'profile': profile,
+    context = {'user_object':user_object, 
+    'user_profile': user_profile,
     'user_posts':user_posts,
     'posts_length': posts_length}
     return render(request, 'profile.html', context)
