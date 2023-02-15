@@ -49,7 +49,18 @@ def like_post(request, id):
 @login_required(login_url='Sign-In')
 def follow_user(request):
     if request.method == 'POST':
-        print(request.POST['follower'])
-        print(request.POST['user'])
+        user = request.POST['user']
+        follower = request.POST['follower']
+        if Followers.objects.filter(user=user, follower=follower).first():
+            delete_follower = Followers.objects.get(user=user, follower=follower)
+            delete_follower.delete()
+            return redirect('profile', id = user)
+        else:
+            new_follower = Followers.objects.create(user=user, follower=follower)
+            new_follower.save()
+            return redirect('profile', id = user)
+
+    else:
+        return redirect('/')
 
 

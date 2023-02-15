@@ -5,7 +5,7 @@ from django.contrib import messages
 from.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
-from feed.models import Post
+from feed.models import Post, Followers
 # Create your views here.
 
 @login_required(login_url='Sign-In')
@@ -105,8 +105,25 @@ def profile(request, id):
     user_profile = Profile.objects.get(user = user_object)
     user_posts = Post.objects.filter(user = id)
     posts_length = len(user_posts)
+    followers_count = Followers.objects.filter(user = id).count()
+    following_count = Followers.objects.filter(follower = id).count()
+    print(following_count)
+
+    follower = request.user.username
+    user = id
+
+    if Followers.objects.filter(user=user, follower=follower):
+        button_text = 'Unfollow'
+    else:
+        button_text = 'Follow'
+
+
+
     context = {'user_object':user_object, 
     'user_profile': user_profile,
     'user_posts':user_posts,
-    'posts_length': posts_length}
+    'posts_length': posts_length,
+    'button_text':button_text,
+    'followers_count':followers_count,
+    'following_count':following_count}
     return render(request, 'profile.html', context)
