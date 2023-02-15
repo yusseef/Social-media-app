@@ -6,13 +6,28 @@ from.models import Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from feed.models import Post, Followers
+from itertools import chain
 # Create your views here.
 
 @login_required(login_url='Sign-In')
 def index(request):
     user = Profile.objects.get(user = request.user)
+
+    feed = []
+    user_following = Followers.objects.filter(follower = request.user.username)
+    user_following_list = [users.user for users in user_following]
+    #print(user_following_list)
+
+    for username in user_following_list:
+        feed_lists = Post.objects.filter(user = username) | Post.objects.filter(user = request.user.username)
+        feed.append(feed_lists)
+
+    
+    feed_list = list(chain(*feed))
+    print(feed_list)
     posts  = Post.objects.all()
-    context = {'user': user, 'posts': posts}
+
+    context = {'user': user, 'posts': feed_list}
     return render(request, 'index.html', context)
 
 def SignUp(request):
