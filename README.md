@@ -1,7 +1,7 @@
 
-# Socila media app
+# Social media app
 
-Social media applicatiob made with Django.
+Social media application made with Django.
 
 ## Acknowledgements
  - [Python](https://www.python.org/)
