@@ -57,7 +57,7 @@
                         }
                     </style>
                     {% for message in messages %}
-                        <h5>{{message}}</h5>
+                        <h5 id = "test">{{message}}</h5>
                     {% endfor %}
                         
                 </div>
@@ -71,9 +71,9 @@
                     <div class="flex justify-start my-4 space-x-1">
                        
                     </div>
-                    <button type="submit" class="bg-gradient-to-br from-pink-500 py-3 rounded-md text-white text-xl to-red-400 w-full">Sign up</button>
+                    <button type="submit" id = "Signup" class="bg-gradient-to-br from-pink-500 py-3 rounded-md text-white text-xl to-red-400 w-full">Sign up</button>
                     <div class="text-center mt-5 space-x-2">
-                        <p class="text-base"> Do you have an account? <a href="sign-in"> Login </a></p>
+                        <p class="text-base" id = 'text'> Do you have an account? <a href="sign-in"> Login </a></p>
                     </div>
                 </form>
             </div>
